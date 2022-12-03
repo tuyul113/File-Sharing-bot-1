@@ -10,22 +10,8 @@ from pyrogram.enums import ParseMode
 import sys
 from datetime import datetime
 
-from config import (
-    API_HASH,
-    APP_ID,
-    CHANNEL_ID
-    FORCE_SUB_CHANNEL,
-    FORCE_SUB_GROUP,
-    FORCE_SUB_CHANNEL1,
-    FORCE_SUB_GROUP1,
-    FORCE_SUB_CHANNEL2,
-    LOGGER,
-    TG_BOT_TOKEN,
-    TG_BOT_WORKERS,
-    PORT,
-)
-    
-    
+from config import API_HASH, APP_ID, LOGGER, TG_BOT_TOKEN, TG_BOT_WORKERS, FORCE_SUB_CHANNEL, CHANNEL_ID, PORT, FORCE_SUB_CHANNEL1, FORCE_SUB_CHANNEL2, FORCE_SUB_GROUP, FORCE_SUB_GROUP1
+
 
 
 class Bot(Client):
