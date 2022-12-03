@@ -1,27 +1,31 @@
-# (©)Codexbotz
-# Recode By Zaen @Mafia_Tobatz
-# Kalo clone Gak usah hapus 
-# gue tandain akun tele nya ngentod
+
+#(©)Codexbotz
+
+from aiohttp import web
+from plugins import web_server
 
 import pyromod.listen
-import sys
-
 from pyrogram import Client
+from pyrogram.enums import ParseMode
+import sys
+from datetime import datetime
 
 from config import (
     API_HASH,
     APP_ID,
-    CHANNEL_ID,
+    CHANNEL_ID
     FORCE_SUB_CHANNEL,
     FORCE_SUB_GROUP,
     FORCE_SUB_CHANNEL1,
     FORCE_SUB_GROUP1,
     FORCE_SUB_CHANNEL2,
     LOGGER,
-    OWNER,
     TG_BOT_TOKEN,
     TG_BOT_WORKERS,
+    PORT,
 )
+    
+    
 
 
 class Bot(Client):
@@ -44,6 +48,10 @@ class Bot(Client):
             try:
                 link = await self.export_chat_invite_link(FORCE_SUB_CHANNEL)
                 self.invitelink = link
+                if not link:
+                    await self.export_chat_invite_link(FORCE_SUB_CHANNEL)
+                    link = (await self.get_chat(FORCE_SUB_CHANNEL)).invite_link
+                self.invitelink = link
             except Exception as a:
                 self.LOGGER(__name__).warning(a)
                 self.LOGGER(__name__).warning(
@@ -59,6 +67,10 @@ class Bot(Client):
         if FORCE_SUB_GROUP:
             try:
                 link = await self.export_chat_invite_link(FORCE_SUB_GROUP)
+                self.invitelink2 = link
+                if not link:
+                    await self.export_chat_invite_link(FORCE_SUB_GROUP)
+                    link = (await self.get_chat(FORCE_SUB_GROUP)).invite_link
                 self.invitelink2 = link
             except Exception as a:
                 self.LOGGER(__name__).warning(a)
@@ -76,6 +88,10 @@ class Bot(Client):
             try:
                 link = await self.export_chat_invite_link(FORCE_SUB_CHANNEL1)
                 self.invitelink3 = link
+                if not link:
+                    await self.export_chat_invite_link(FORCE_SUB_CHANNEL1)
+                    link = (await self.get_chat(FORCE_SUB_CHANNEL1)).invite_link
+                self.invitelink3 = link
             except Exception as a:
                 self.LOGGER(__name__).warning(a)
                 self.LOGGER(__name__).warning(
@@ -90,6 +106,10 @@ class Bot(Client):
             try:
                 link = await self.export_chat_invite_link(FORCE_SUB_CHANNEL2)
                 self.invitelink5 = link
+                if not link:
+                    await self.export_chat_invite_link(FORCE_SUB_CHANNEL2)
+                    link = (await self.get_chat(FORCE_SUB_CHANNEL2)).invite_link
+                self.invitelink5 = link
             except Exception as a:
                 self.LOGGER(__name__).warning(a)
                 self.LOGGER(__name__).warning(
@@ -103,6 +123,10 @@ class Bot(Client):
             try:
                 link = await self.export_chat_invite_link(FORCE_SUB_GROUP1)
                 self.invitelink4 = link
+                if not link:
+                    await self.export_chat_invite_link(FORCE_SUB_GROUP1)
+                    link = (await self.get_chat(FORCE_SUB_GROUP1)).invite_link
+                self.invitelink4 = link
             except Exception as a:
                 self.LOGGER(__name__).warning(a)
                 self.LOGGER(__name__).warning(
@@ -115,27 +139,37 @@ class Bot(Client):
                     "\nBot Berhenti. Gabung Group https://t.me/SharingUserbot untuk Bantuan"
                 )
                 sys.exit()
-        try:
+                
+         try:
+                
             db_channel = await self.get_chat(CHANNEL_ID)
             self.db_channel = db_channel
-            test = await self.send_message(chat_id=db_channel.id, text="Test Message")
+            test = await self.send_message(chat_id = db_channel.id, text = "Test Message")
             await test.delete()
         except Exception as e:
             self.LOGGER(__name__).warning(e)
-            self.LOGGER(__name__).warning(
-                f"Pastikan Bot adalah Admin di Channel DataBase, dan Periksa kembali Nilai CHANNEL_ID, Nilai Saat Ini: {CHANNEL_ID}"
-            )
-            self.LOGGER(__name__).info(
-                "\nBot Berhenti. Gabung Group https://t.me/SharingUserbot untuk Bantuan"
-            )
+            self.LOGGER(__name__).warning(f"Make Sure bot is Admin in DB Channel, and Double check the CHANNEL_ID Value, Current Value {CHANNEL_ID}")
+            self.LOGGER(__name__).info("\nBot Stopped. Join https://t.me/CodeXBotzSupport for support")
             sys.exit()
 
-        self.set_parse_mode("html")
-        self.LOGGER(__name__).info(
-            f"[🔥 BERHASIL DIAKTIFKAN! 🔥]\n\nBOT Dibuat oleh @{OWNER}\nJika @{OWNER} Membutuhkan Bantuan, Silahkan Tanyakan ke https://t.me/BdrlBukan"
-        )
+        self.set_parse_mode(ParseMode.HTML)
+        self.LOGGER(__name__).info(f"Bot Running..!\n\nCreated by \nhttps://t.me/CodeXBotz")
+        self.LOGGER(__name__).info(f""" \n\n       
+░█████╗░░█████╗░██████╗░███████╗██╗░░██╗██████╗░░█████╗░████████╗███████╗
+██╔══██╗██╔══██╗██╔══██╗██╔════╝╚██╗██╔╝██╔══██╗██╔══██╗╚══██╔══╝╚════██║
+██║░░╚═╝██║░░██║██║░░██║█████╗░░░╚███╔╝░██████╦╝██║░░██║░░░██║░░░░░███╔═╝
+██║░░██╗██║░░██║██║░░██║██╔══╝░░░██╔██╗░██╔══██╗██║░░██║░░░██║░░░██╔══╝░░
+╚█████╔╝╚█████╔╝██████╔╝███████╗██╔╝╚██╗██████╦╝╚█████╔╝░░░██║░░░███████╗
+░╚════╝░░╚════╝░╚═════╝░╚══════╝╚═╝░░╚═╝╚═════╝░░╚════╝░░░░╚═╝░░░╚══════╝
+                                          """)
         self.username = usr_bot_me.username
+        #web-response
+        app = web.AppRunner(await web_server())
+        await app.setup()
+        bind_address = "0.0.0.0"
+        await web.TCPSite(app, bind_address, PORT).start()
 
     async def stop(self, *args):
         await super().stop()
-        self.LOGGER(__name__).info("Bot stopped.")
+        self.LOGGER(__name__).info("Bot stopped.") 
+        
